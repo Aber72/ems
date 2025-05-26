@@ -13,6 +13,8 @@
 
 <div class="container">
     <h2>Add Employee</h2>
+    
+    
     <form:form method="post" action="add" modelAttribute="employee">
         <form:errors path="*" cssClass="error"/>
 
@@ -38,3 +40,29 @@
 
         <button type="submit" class="btn"> Add Employee</button>
     </form:form>
+        <a class="back-link" href="<c:url value='/'/>">Back to Home</a>
+</div>
+
+<script type="module">
+    const toast = document.getElementById("toast");
+
+    const showToast = (message, color = '#4caf50') => {
+        toast.textContent = message;
+        toast.style.backgroundColor = color;
+        toast.classList.add("show");
+        setTimeout(() => toast.classList.remove("show"), 4000);
+    };
+
+    <%-- Toast using JSTL flags --%>
+    <c:if test="${not empty msg}">
+        showToast('${msg}');
+    </c:if>
+    <c:if test="${not empty error}">
+        showToast('${error}', '#e53935');
+    </c:if>
+</script>
+</body>
+</html>
+    
+    
+    
