@@ -119,6 +119,7 @@
         }, 2500);
     </script>
 </c:if>
+
 <form:form method="post" action="/employmentsystem/compensation/save" modelAttribute="compensation">
         
         <!-- 🔍 Searchable Employee Dropdown -->
@@ -140,6 +141,7 @@
         </form:select>
 
         <label> Amount:</label>
+        
         <form:input path="amount"/>
 
         <label>Description:</label>
@@ -160,3 +162,13 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
+$(document).ready(function() {
+    $('#employeeSelect').select2({
+        placeholder: "-- Select Employee --",
+        allowClear: true,
+        width: '100%'
+    });
+}) ;
+</script>
+</body>
+</html>
