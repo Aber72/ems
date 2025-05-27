@@ -103,6 +103,64 @@ public class CompensationController {
 
         return "comp_history";
     }
+    
+    
+    @GetMapping("/breakdown")
+    public String showCompBreakdownForm(@RequestParam("uid") Long uid, Model model) {
+        model.addAttribute("uid", uid);
+        return "comp_breakdown_form"; // for Monthly Breakdown from History page
+    }
+
+    @GetMapping("/monthly-entry")
+    public String showMonthlyBreakdownEntryForm(Model model) {
+        model.addAttribute("employees", employeeService.getAllEmployees());
+        return "comp_breakdown_entry"; // for direct entry form
+    }
+
+
+
+    @PostMapping("/breakdown")
+    public String processCompBreakdown(@RequestParam("uid") Long uid,
+                                       @RequestParam("yearMonth") String yearMonth,
+                                       Model model,
+                                       RedirectAttributes redirectAttributes) {
+
+        List<Compensation> comps = compensationService.getCompensationsByMonth(uid, yearMonth);
+
+        if (comps == null || comps.isEmpty()) {
+            redirectAttributes.addFlashAttribute("error", "❌ No compensation breakdown found for this employee and month.");
+            return "redirect:/compensation/monthly-entry";
+        }
+
+        double salary = comps.stream()
+                .filter(c -> "SALARY".equalsIgnoreCase(c.getType()))
+                .mapToDouble(Compensation::getAmount)
+                .sum();
+
+        double bonus = comps.stream()
+                .filter(c -> "BONUS".equalsIgnoreCase(c.getType()))
+                .mapToDouble(Compensation::getAmount)
+                .sum();
+
+        double other = comps.stream()
+                .filter(c -> !"SALARY".equalsIgnoreCase(c.getType()) &&
+                             !"BONUS".equalsIgnoreCase(c.getType()))
+                .mapToDouble(Compensation::getAmount)
+                .sum();
+
+        double total = salary + bonus + other;
+
+        model.addAttribute("uid", uid);
+        model.addAttribute("yearMonth", yearMonth);
+        model.addAttribute("salary", salary);
+        model.addAttribute("bonus", bonus);
+        model.addAttribute("other", other);
+        model.addAttribute("total", total);
+        model.addAttribute("compensations", comps);
+
+        return "comp_breakdown";
+    }
+
 
     
     
