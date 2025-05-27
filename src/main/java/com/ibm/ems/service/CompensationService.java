@@ -1,7 +1,8 @@
 package com.ibm.ems.service;
 
-
+import java.time.LocalDate;
 import java.time.YearMonth;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,8 +11,8 @@ import com.ibm.ems.entities.Compensation;
 import com.ibm.ems.repositories.CompensationRepository;
 
 @Service
- interface CompensationService{
-	   @Autowired
+ public  class CompensationService{
+	 @Autowired
 	    private CompensationRepository compensationRepository;
 
 	    public String addCompensation(Compensation comp) {
@@ -50,7 +51,18 @@ import com.ibm.ems.repositories.CompensationRepository;
 	        compensationRepository.save(comp);
 	        return "SUCCESS";
 	    }
-	
-	
+
+	    public List<Compensation> getCompensationHistory(String uidStr, LocalDate startDate, LocalDate endDate) {
+	        Long uid = Long.parseLong(uidStr);
+	        return compensationRepository.findByEmployeeUidAndDateBetween(uid, startDate, endDate);
+	    }
+
+	    public List<Compensation> getCompensationsByMonth(Long uid, String yearMonth) {
+	        YearMonth ym = YearMonth.parse(yearMonth);
+	        LocalDate start = ym.atDay(1);
+	        LocalDate end = ym.atEndOfMonth();
+	        return compensationRepository.findByEmployeeUidAndDateBetween(uid, start, end);
+	    }
+
 
 }
