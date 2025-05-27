@@ -8,14 +8,21 @@ import com.ibm.ems.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import org.springframework.validation.BindingResult;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/compensation")
@@ -128,7 +135,7 @@ public class CompensationController {
         List<Compensation> comps = compensationService.getCompensationsByMonth(uid, yearMonth);
 
         if (comps == null || comps.isEmpty()) {
-            redirectAttributes.addFlashAttribute("error", "❌ No compensation breakdown found for this employee and month.");
+            redirectAttributes.addFlashAttribute("error", "â�Œ No compensation breakdown found for this employee and month.");
             return "redirect:/compensation/monthly-entry";
         }
 

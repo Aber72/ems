@@ -17,7 +17,7 @@ public class HomeController {
 //	}
 	  @RequestMapping("/")
 	    public String showHomePage() {
-	        return "main"; // returns home.jsp
+	        return "home"; // returns home.jsp
 	    }
 	
 	 
