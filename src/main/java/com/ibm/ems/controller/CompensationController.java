@@ -26,74 +26,46 @@ public class CompensationController {
 
     @Autowired
     private EmployeeService employeeService;
-
-    // Add compensation form
-    @GetMapping("/add/{employeeId}")
-    public String showAddCompensationForm(@PathVariable Long employeeUid, Model model) {
-        Employee employee = employeeService.getEmployeeById(employeeUid);
-        Compensation compensation = new Compensation();
-        compensation.setEmployee(employee);
-        model.addAttribute("compensation", compensation);
-        return "add-compensation";
+    
+    @GetMapping("/add")
+    public String showAddForm(Model model) {
+        model.addAttribute("compensation", new Compensation());
+        model.addAttribute("employees", employeeService.getAllEmployees());
+        return "add_compensation";
     }
-
-    // Save compensation
+    
+    
     @PostMapping("/save")
-    public String saveCompensation(@Valid @ModelAttribute("compensation") Compensation compensation,
-                                   BindingResult result, Model model) {
-        if (result.hasErrors()) {
-            return "add-compensation";
+    public String saveComp(@ModelAttribute Compensation compensation, Model model) {
+        String result = compensationService.addCompensation(compensation);
+
+        // Always load employee dropdown
+        model.addAttribute("employees", employeeService.getAllEmployees());
+
+        switch (result) {
+            case "DUPLICATE_SALARY":
+                model.addAttribute("message", "Salary already exists for this month.");
+                break;
+            case "INVALID_AMOUNT":
+                model.addAttribute("message", "Amount must be greater than 0 for selected type.");
+                break;
+            case "INVALID_ADJUSTMENT":
+                model.addAttribute("message", "Adjustment amount cannot be zero.");
+                break;
+            case "MISSING_DESCRIPTION":
+                model.addAttribute("message", "Description is required for this compensation type.");
+                break;
+            case "SUCCESS":
+                model.addAttribute("msg", "Compensation added successfully!");
+                model.addAttribute("compensation", new Compensation()); // Clear form for next entry
+                break;
+            default:
+                model.addAttribute("message", "Unknown error occurred.");
         }
 
-        compensationService.saveCompensation(compensation);
-        model.addAttribute("successMessage", "Compensation added successfully.");
-        return "add-compensation";
+        return "add_compensation";
     }
 
-    // View compensation history
-    @GetMapping("/history/{employeeId}")
-    public String viewCompHistory(@PathVariable Long employeeUid,
-                                  @RequestParam String start,
-                                  @RequestParam String end,
-                                  Model model) {
-        Date startDate = Date.valueOf(start + "-01");
-        Date endDate = Date.valueOf(end + "-28"); // Approximate end of month
 
-        List<Compensation> history = compensationService.getCompensationByEmployeeAndDateRange(employeeUid, startDate, endDate);
-        model.addAttribute("compHistory", history);
-        return "compensation-history";
-    }
-
-    // View monthly breakdown
-    @GetMapping("/breakdown/{employeeId}/{year}/{month}")
-    public String viewBreakdown(@PathVariable Long employeeUid,
-                                @PathVariable int year,
-                                @PathVariable int month,
-                                Model model) {
-
-        List<Compensation> comps = compensationService.getCompensationByEmployeeAndMonth(employeeUid, year, month);
-        model.addAttribute("comps", comps);
-        return "monthly-breakdown";
-    }
-
-    // Edit compensation
-    @GetMapping("/edit/{id}")
-    public String editCompensation(@PathVariable Long id, Model model) {
-        Compensation comp = compensationService.getCompensationByEmployeeId(id)
-                .stream().filter(c -> c.getId().equals(id)).findFirst().orElse(null);
-        model.addAttribute("compensation", comp);
-        return "edit-compensation";
-    }
-
-    @PostMapping("/update")
-    public String updateCompensation(@Valid @ModelAttribute("compensation") Compensation compensation,
-                                     BindingResult result, Model model) {
-        if (result.hasErrors()) {
-            return "edit-compensation";
-        }
-
-        compensationService.updateCompensation(compensation);
-        model.addAttribute("successMessage", "Compensation updated successfully.");
-        return "edit-compensation";
-    }
+   
 }
