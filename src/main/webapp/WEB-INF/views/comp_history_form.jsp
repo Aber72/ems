@@ -113,3 +113,20 @@
         }
     </style>
 </head>
+
+<body>
+<div class="container">
+    <h2>📊 Compensation History - Enter Employee and Date Range</h2>
+
+    <c:if test="${not empty error}">
+        <div class="error">${error}</div>
+    </c:if>
+
+    <form id="historyForm" method="post" action="history">
+        <label><i class="fas fa-user"></i> Select Employee:</label>
+        <select id="employeeSelect" name="uid" required>
+            <option value="">-- Select Employee --</option>
+            <c:forEach var="emp" items="${employees}">
+                <option value="${emp.uid}">${emp.uid} - ${emp.firstName} ${emp.lastName}</option>
+            </c:forEach>
+        </select>
