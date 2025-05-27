@@ -1,0 +1,32 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 40px;
+    
+}
+
+.header {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 30px;
+    color: lime;
+}
+
+.section {
+    border: 2px dashed #ccc;
+    padding: 20px;
+    margin-bottom: 20px;
+    min-height: 100px;
+}
+
+.section-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+   background-color: white;
+   color: red;
+}
+
+.placeholder {
+    color: #aaa;
+    font-style: italic;
+}

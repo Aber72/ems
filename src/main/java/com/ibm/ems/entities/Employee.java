@@ -17,7 +17,7 @@ public class Employee {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long uid;
+	private Long id;
 	
     
     @NotBlank(message = "First Name is required")
@@ -44,19 +44,37 @@ public class Employee {
     private List<Compensation> compensations;
 
 
-    
-  //Getter & Setter
-    
-	public Long getUid() {
-		return uid;
+	public Employee() {
+		super();
+		// TODO Auto-generated constructor stub
 	}
 
 
+	public Employee(Long id, @NotBlank(message = "First Name is required") String firstName, String middleName,
+			@NotBlank(message = "Last Name is required") String lastName,
+			@PastOrPresent(message = "Birth date cannot be in the future") Date birthDate,
+			@NotBlank(message = "Position is required") String position, List<Compensation> compensations) {
+		super();
+		this.id = id;
+		this.firstName = firstName;
+		this.middleName = middleName;
+		this.lastName = lastName;
+		this.birthDate = birthDate;
+		this.position = position;
+		this.compensations = compensations;
+	}
+
 	
+	  
+	  //Getter & Setter
+
+	public Long getId() {
+		return id;
+	}
 
 
-	public void setUid(Long uid) {
-		this.uid = uid;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 
@@ -119,27 +137,12 @@ public class Employee {
 		this.compensations = compensations;
 	}
 	
+
+
+  
 	
-	public Employee(Long uid, String firstName, String middleName, String lastName, Date birthDate, String position,
-			List<Compensation> compensations) {
-		super();
-		this.uid = uid;
-		this.firstName = firstName;
-		this.middleName = middleName;
-		this.lastName = lastName;
-		this.birthDate = birthDate;
-		this.position = position;
-		this.compensations = compensations;
-	}
-
-
-
-
-
-	public Employee() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
+    
+	
 	
 	
 	
