@@ -5,6 +5,99 @@
 <head>
 <meta charset="UTF-8">
 <title>Search Employees</title>
+<style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            margin: 40px;
+            background-color: #f4f6f8;
+            color: #333;
+        }
+
+        h2 {
+            color:#3e1d25;
+            font-size: 26px;
+            margin-bottom: 20px;
+        }
+
+        form {
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            max-width: 600px;
+        }
+
+        label {
+            font-weight: bold;
+            display: inline-block;
+            width: 120px;
+            margin-bottom: 10px;
+        }
+
+        input[type="text"], input[type="submit"], input[type="reset"] {
+            padding: 8px;
+            font-size: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            width: 60%;
+        }
+
+        input[type="submit"], input[type="reset"] {
+            width: auto;
+            background-color: #5fb3ad;
+            color: white;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        input[type="submit"]:hover, input[type="reset"]:hover {
+            background-color: #81c7c1;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        th {
+            background-color: #3e1d25;
+            color: white;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .no-result {
+            font-style: italic;
+            color: red;
+            margin-top: 10px;
+        }
+
+        a {
+            display: inline-block;
+            margin-top: 20px;
+            text-decoration: none;
+            color: #1e88e5;
+            font-weight: bold;
+        }
+
+        a:hover {
+            color: #0d47a1;
+        }
+    </style>
 </head>
 <body>
 <h2>🔍 Search Employees</h2>
