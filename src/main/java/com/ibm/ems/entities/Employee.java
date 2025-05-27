@@ -1,4 +1,4 @@
-package com.ibm.ems.entities;
+package com.ibm.emsp.entities;
 
 import java.time.LocalDate;
 
