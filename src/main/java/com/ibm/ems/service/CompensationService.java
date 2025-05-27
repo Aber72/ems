@@ -21,7 +21,7 @@ import com.ibm.ems.repositories.CompensationRepository;
 	        Double amount = comp.getAmount();
 	        String description = comp.getDescription() != null ? comp.getDescription().trim() : "";
 
-	        // 1. ✅ Salary: one per employee per month
+	        // 1.  Salary: one per employee per month
 	        if ("SALARY".equals(type)) {
 	            boolean exists = compensationRepository.existsByEmployeeUidAndTypeAndDateBetween(
 	                    comp.getEmployee().getUid(), "SALARY",
