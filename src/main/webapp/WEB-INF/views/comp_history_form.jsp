@@ -130,3 +130,15 @@
                 <option value="${emp.uid}">${emp.uid} - ${emp.firstName} ${emp.lastName}</option>
             </c:forEach>
         </select>
+
+        <label><i class="fas fa-calendar-alt"></i> Start Date:</label>
+        <input type="date" name="startDate" id="startDate" required />
+
+        <label><i class="fas fa-calendar-alt"></i> End Date:</label>
+        <input type="date" name="endDate" id="endDate" required />
+
+        <div class="action-buttons">
+            <button class="btn btn-primary" type="submit"><i class="fas fa-database"></i> Get History</button>
+            <button class="btn btn-secondary" type="button" onclick="clearForm()"><i class="fas fa-broom"></i> Clear</button>
+        </div>
+    </form>
