@@ -310,4 +310,33 @@
     </div>
   </main>
 
+<footer>© 2025 IBM Corp. All rights reserved.</footer>
+
+  <script>
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark');
+      document.body.classList.toggle('light');
+    }
+
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      document.getElementById(tabId).classList.add('active');
+
+      const buttons = document.querySelectorAll('.tab-button');
+      buttons.forEach(btn => btn.classList.remove('active'));
+      if (tabId === 'employeeSection') buttons[0].classList.add('active');
+      else buttons[1].classList.add('active');
+    }
+
+    window.onload = () => {
+      setTimeout(() => {
+        document.getElementById('loader').style.display = 'none';
+      }, 500);
+    };
+  </script>
+</body>
+</html>
+
   
