@@ -1,52 +1,130 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>All Employees</title>
+    <meta charset="UTF-8">
+    <title>Search Employees</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f5f7fa;
+            padding: 30px;
+        }
+        h2 {
+            text-align: center;
+            color: #3e1d25;
+            margin-bottom: 30px;
+        }
+        #filterBox {
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto 20px auto;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            display: block;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        th, td {
+            text-align: center;
+            padding: 12px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        th {
+            background-color: #3e1d25;
+            color: white;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        .btn {
+            padding: 6px 12px;
+            border-radius: 4px;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            margin-right: 5px;
+        }
+        .edit-btn { background-color: #1e88e5; }
+        .edit-btn:hover { background-color: #1565c0; }
+        .delete-btn { background-color: #e53935; }
+        .delete-btn:hover { background-color: #b71c1c; }
+        .no-results {
+            text-align: center;
+            color: #e53935;
+            font-style: italic;
+            margin-top: 20px;
+            display: none;
+        }
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 30px;
+            font-weight: bold;
+            color: #1565c0;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .debug-count {
+            text-align: center;
+            color: #333;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+    </style>
 </head>
 <body>
-<h2> List of Employees</h2>
+
+<h2>Search Employee Results</h2>
 
 <input type="text" id="filterBox" placeholder="🔍 Filter by name or position..." onkeyup="filterTable()" />
 
-<c:if test="${not empty employees}">
-    <table id="employeeTable">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>First Name</th>
-                <th>Middle Name</th>
-                <th>Last Name</th>
-                <th>Birth Date</th>
-                <th>Position</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <c:forEach var="emp" items="${employees}">
-                <tr>
-                    <td>${emp.id}</td>
-                    <td>${emp.firstName}</td>
-                    <td>${emp.middleName}</td>
-                    <td>${emp.lastName}</td>
-                    <td>${emp.birthDate}</td>
-                    <td>${emp.position}</td>
-                    <td>
-                        <a class="btn edit-btn" href="edit?id=${emp.id}"> Edit</a>
-<%--                         <a class="btn delete-btn" href="delete?uid=${emp.uid}" onclick="return confirm('Are you sure you want to delete this employee?');">🗑️ Delete</a> --%>
-                    </td>
-                </tr>
-            </c:forEach>
-        </tbody>
-    </table>
-</c:if>
+<div class="debug-count">
+    Employees found (from server): ${fn:length(employees)}
+</div>
 
-<c:if test="${empty employees}">
-    <div class="no-results">😢 No employees found.</div>
-</c:if>
-<a href="<c:url value='/'/>" class="back-link">⬅ Back to Home</a>
+<table id="employeeTable">
+    <thead>
+        <tr>
+            <th>UID</th>
+            <th>First Name</th>
+            <th>Middle Name</th>
+            <th>Last Name</th>
+            <th>Birth Date</th>
+            <th>Position</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <c:forEach var="emp" items="${employees}">
+            <tr>
+                <td>${emp.uid}</td>
+                <td>${emp.firstName}</td>
+                <td>${emp.middleName}</td>
+                <td>${emp.lastName}</td>
+                <td>${emp.birthDate}</td>
+                <td>${emp.position}</td>
+                <td>
+                    <a class="btn edit-btn" href="edit?uid=${emp.uid}">Edit</a>
+                </td>
+            </tr>
+        </c:forEach>
+    </tbody>
+</table>
+
+<div class="no-results" id="noResults">😢 No matching employees found.</div>
+
+<a href='/'class="back-link">⬅ Back to Home</a>
 
 <script type="text/javascript">
     function filterTable() {
@@ -72,13 +150,9 @@
             if (match) visibleCount++;
         }
 
-        const noResultsMsg = document.querySelector(".no-results");
-        if (noResultsMsg) {
-            noResultsMsg.style.display = visibleCount === 0 ? "block" : "none";
-        }
+        document.getElementById("noResults").style.display = visibleCount === 0 ? "block" : "none";
     }
 </script>
-
 
 </body>
 </html>

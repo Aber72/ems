@@ -1,5 +1,7 @@
 package com.ibm.ems.service;
 
+
+
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.List;
@@ -11,58 +13,88 @@ import com.ibm.ems.entities.Compensation;
 import com.ibm.ems.repositories.CompensationRepository;
 
 @Service
- public  class CompensationService{
-	 @Autowired
-	    private CompensationRepository compensationRepository;
+public class CompensationService {
 
-	    public String addCompensation(Compensation comp) {
-	        YearMonth month = YearMonth.from(comp.getDate());
-	        String type = comp.getType().toUpperCase();
-	        Double amount = comp.getAmount();
-	        String description = comp.getDescription() != null ? comp.getDescription().trim() : "";
+    @Autowired
+    private CompensationRepository compensationRepository;
 
-	        // 1.  Salary: one per employee per month
-	        if ("SALARY".equals(type)) {
-	            boolean exists = compensationRepository.existsByEmployeeUidAndTypeAndDateBetween(
-	                    comp.getEmployee().getUid(), "SALARY",
-	                    month.atDay(1), month.atEndOfMonth()
-	            );
-	            if (exists) return "DUPLICATE_SALARY";
-	            // Salary can be zero or negative — no further validation needed
-	        }
+    public String addCompensation(Compensation comp) {
+        YearMonth month = YearMonth.from(comp.getDate());
+        String type = comp.getType().toUpperCase();
+        Double amount = comp.getAmount();
+        String description = comp.getDescription() != null ? comp.getDescription().trim() : "";
 
-	        // 2. ✅ Amount > 0 required for these types
-	        if (("BONUS".equals(type) || "COMMISSION".equals(type) || "ALLOWANCE".equals(type)) && (amount == null || amount <= 0)) {
-	            return "INVALID_AMOUNT";
-	        }
+     
+        if ("SALARY".equals(type)) {
+            boolean exists = compensationRepository.existsByEmployeeUidAndTypeAndDateBetween(
+                    comp.getEmployee().getUid(), "SALARY",
+                    month.atDay(1), month.atEndOfMonth()
+            );
+            if (exists) return "DUPLICATE_SALARY";
+            
+        }
 
-	        // 3. ✅ Adjustment: amount ≠ 0
-	        if ("ADJUSTMENT".equals(type) && (amount == null || amount == 0)) {
-	            return "INVALID_ADJUSTMENT";
-	        }
+   
+        if (("BONUS".equals(type) || "COMMISSION".equals(type) || "ALLOWANCE".equals(type)) && (amount == null || amount <= 0)) {
+            return "INVALID_AMOUNT";
+        }
 
-	        // 4. ✅ Description required for these types
-	        if (("BONUS".equals(type) || "COMMISSION".equals(type) || "ALLOWANCE".equals(type) || "ADJUSTMENT".equals(type))
-	                && description.isEmpty()) {
-	            return "DESCRIPTION_REQUIRED";
-	        }
+        
+        if ("ADJUSTMENT".equals(type) && (amount == null || amount == 0)) {
+            return "INVALID_ADJUSTMENT";
+        }
 
-	        // ✅ Save to DB
-	        compensationRepository.save(comp);
-	        return "SUCCESS";
-	    }
+        
+        if (("BONUS".equals(type) || "COMMISSION".equals(type) || "ALLOWANCE".equals(type) || "ADJUSTMENT".equals(type))
+                && description.isEmpty()) {
+            return "DESCRIPTION_REQUIRED";
+        }
 
-	    public List<Compensation> getCompensationHistory(String uidStr, LocalDate startDate, LocalDate endDate) {
-	        Long uid = Long.parseLong(uidStr);
-	        return compensationRepository.findByEmployeeUidAndDateBetween(uid, startDate, endDate);
-	    }
+        
+        compensationRepository.save(comp);
+        return "SUCCESS";
+    }
 
-	    public List<Compensation> getCompensationsByMonth(Long uid, String yearMonth) {
-	        YearMonth ym = YearMonth.parse(yearMonth);
-	        LocalDate start = ym.atDay(1);
-	        LocalDate end = ym.atEndOfMonth();
-	        return compensationRepository.findByEmployeeUidAndDateBetween(uid, start, end);
-	    }
+    public List<Compensation> getCompensationHistory(String uidStr, LocalDate startDate, LocalDate endDate) {
+        Long uid = Long.parseLong(uidStr);
+        return compensationRepository.findByEmployeeUidAndDateBetween(uid, startDate, endDate);
+    }
 
+    public List<Compensation> getCompensationsByMonth(Long uid, String yearMonth) {
+        YearMonth ym = YearMonth.parse(yearMonth);
+        LocalDate start = ym.atDay(1);
+        LocalDate end = ym.atEndOfMonth();
+        return compensationRepository.findByEmployeeUidAndDateBetween(uid, start, end);
+    }
+    
+    
+    public Compensation getCompensationById(Long id) {
+        return compensationRepository.findById(id).orElse(null);
+    }
+
+    public String validateAndUpdate(Compensation comp, Double amount, String description) {
+        String type = comp.getType().toUpperCase();
+
+        if (("BONUS".equals(type) || "COMMISSION".equals(type) || "ALLOWANCE".equals(type)) && (amount == null || amount <= 0)) {
+            return "❌ Amount must be greater than 0 for type: " + type;
+        }
+
+        if ("ADJUSTMENT".equals(type) && (amount == null || amount == 0)) {
+            return "❌ Adjustment amount cannot be zero.";
+        }
+
+        if (("BONUS".equals(type) || "COMMISSION".equals(type) || "ALLOWANCE".equals(type) || "ADJUSTMENT".equals(type))
+                && (description == null || description.trim().isEmpty())) {
+            return "❌ Description is required for this type.";
+        }
+
+        comp.setAmount(amount);
+        comp.setDescription(description.trim());
+        compensationRepository.save(comp);
+        return "SUCCESS";
+    }
+    
+    
 
 }
+

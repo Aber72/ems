@@ -1,11 +1,11 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Search Employees</title>
-<style>
+    <title>Search Employees</title>
+    <meta charset="UTF-8">
+    <style>
         body {
             font-family: 'Segoe UI', sans-serif;
             margin: 40px;
@@ -100,6 +100,7 @@
     </style>
 </head>
 <body>
+
 <h2>🔍 Search Employees</h2>
 
 <form action="search" method="get">
@@ -115,6 +116,7 @@
     <input type="submit" value="Search" />
     <input type="reset" value="Clear" />
 </form>
+
 <h3>📄 Search Results:</h3>
 
 <c:choose>
