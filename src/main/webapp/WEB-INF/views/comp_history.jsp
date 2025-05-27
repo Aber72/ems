@@ -57,3 +57,67 @@
             border-left: 4px solid #d00000;
             font-weight: 600;
         }
+         table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 14px 18px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #1e2a44;
+            color: white;
+            font-size: 16px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f8fafd;
+        }
+
+        tr:hover {
+            background-color: #edf2fa;
+        }
+
+        .breakdown-btn {
+            background-color: #1e88e5;
+            color: white;
+            padding: 8px 14px;
+            font-size: 14px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .breakdown-btn:hover {
+            background-color: #1565c0;
+        }
+
+        .back-button {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 10px 18px;
+            font-weight: 600;
+            color: #003973;
+            background-color: #f0f4fc;
+            border: 2px solid #003973;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            background-color: #003973;
+            color: white;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
