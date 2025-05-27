@@ -65,6 +65,25 @@ public class EmployeeController {
         model.addAttribute("position", position);
         return "searchEmployee";
     }
+    
+    @GetMapping("/list")
+    public String listAllEmployees(Model model) {
+        List<Employee> employees = employeeService.getAllEmployees();
+        model.addAttribute("employees", employees);
+        return "list_employees";
+    }
+    
+    @GetMapping("/edit")
+    public String showEditForm(@RequestParam("uid") Long uid, Model model) {
+        Employee employee = employeeService.getEmployeeById(uid);
+        if (employee == null) {
+            return "redirect:/employee/list";
+        }
+        model.addAttribute("employee", employee);
+        return "edit_employee";
+    }
+
+
 
 
   
