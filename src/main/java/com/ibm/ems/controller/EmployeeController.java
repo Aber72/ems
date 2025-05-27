@@ -98,6 +98,23 @@ public class EmployeeController {
         model.addAttribute("employee", employee);
         return "edit_employee";
     }
+    
+    @GetMapping("/delete")
+    public String deleteEmployee(@RequestParam("uid") Long uid) {
+        employeeService.deleteEmployee(uid);
+        return "redirect:/employee/list";
+    }
+
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        binder.registerCustomEditor(LocalDate.class, new PropertyEditorSupport() {
+            @Override
+            public void setAsText(String text) throws IllegalArgumentException {
+                setValue(LocalDate.parse(text, DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+            }
+        });
+    }
+
 
 
 
