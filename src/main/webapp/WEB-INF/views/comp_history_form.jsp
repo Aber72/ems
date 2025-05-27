@@ -142,3 +142,28 @@
             <button class="btn btn-secondary" type="button" onclick="clearForm()"><i class="fas fa-broom"></i> Clear</button>
         </div>
     </form>
+    
+    <!-- 🔁 Back to Home link -->
+    <a class="back-link" href="<c:url value='/'/>"><i class="fas fa-arrow-left"></i> Back to Home</a>
+</div>
+
+<!-- Scripts -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+    function clearForm() {
+        document.getElementById("historyForm").reset();
+        $('#employeeSelect').val('').trigger('change');
+    }
+
+    $(document).ready(function () {
+        $('#employeeSelect').select2({
+            placeholder: "-- Select Employee --",
+            allowClear: true,
+            width: '100%'
+        });
+    });
+</script>
+</body>
+</html>
+    
