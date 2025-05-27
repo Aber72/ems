@@ -13,8 +13,7 @@ import com.ibm.ems.entities.Employee;
 
 @Repository
 
-public interface CompensationRepository extends JpaRepository<Employee, Long> {
-	boolean existsByEmployeeUidAndTypeAndDateBetween(Long id, String type, LocalDate start, LocalDate end);
-	List<Compensation> findByEmployeeUidAndDateBetween(Long id, LocalDate start, LocalDate end);
-
+public interface CompensationRepository extends JpaRepository<Compensation, Long> {
+	boolean existsByEmployeeUidAndTypeAndDateBetween(Long uid, String type, LocalDate start, LocalDate end);
+	List<Compensation> findByEmployeeUidAndDateBetween(Long uid, LocalDate start, LocalDate end);
 }
