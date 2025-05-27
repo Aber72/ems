@@ -118,3 +118,34 @@
             margin-right: 8px;
         }
     </style>
+    
+    </head>
+<body>
+<div class="container">
+    <h2><i class="fas fa-chart-pie"></i> Compensation Breakdown for ${yearMonth}</h2>
+
+    <table>
+        <tr>
+            <th>Date</th>
+            <th>Type</th>
+            <th>Amount</th>
+            <th>Description</th>
+        </tr>
+        <c:forEach var="comp" items="${compensations}">
+            <tr>
+                <td>${comp.date}</td>
+                <td>${comp.type}</td>
+                <td>₹${comp.amount}</td>
+                <td>
+                    <c:choose>
+                        <c:when test="${fn:length(comp.description) > 50}">
+                            ${fn:substring(comp.description, 0, 50)}...
+                        </c:when>
+                        <c:otherwise>
+                            ${comp.description}
+                        </c:otherwise>
+                    </c:choose>
+                </td>
+            </tr>
+        </c:forEach>
+    </table>
