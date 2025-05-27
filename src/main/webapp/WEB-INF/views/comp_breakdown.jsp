@@ -146,6 +146,11 @@
                         </c:otherwise>
                     </c:choose>
                 </td>
+                <td>
+                	<a href="${pageContext.request.contextPath}/compensation/edit?id=${comp.id}&uid=${uid}&yearMonth=${yearMonth}">
+					     Edit
+					</a>
+		        </td>
             </tr>
         </c:forEach>
     </table>

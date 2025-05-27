@@ -115,12 +115,12 @@
     <div class="flash-message flash-success">${msg}</div>
     <script>
         setTimeout(() => {
-            window.location.href = "/employmentsystem/compensation/add";
+            window.location.href = "/ems/compensation/add";
         }, 2500);
     </script>
 </c:if>
 
-<form:form method="post" action="/employmentsystem/compensation/save" modelAttribute="compensation">
+<form:form method="post" action="/ems/compensation/save" modelAttribute="compensation">
         
         <!-- 🔍 Searchable Employee Dropdown -->
         <label>Select Employee:</label>
@@ -154,7 +154,7 @@
     </form:form>
     <!-- 🔄 Manual Refresh Button -->
    <div class="refresh-btn">
-    <button onclick="window.location.href='/employmentsystem/compensation/add'"> Refresh Page</button>
+    <button onclick="window.location.href='/ems/compensation/add'"> Refresh Page</button>
     <a class="back-link" href="<c:url value='/'/>">Back to Home</a>
 </div>
 
