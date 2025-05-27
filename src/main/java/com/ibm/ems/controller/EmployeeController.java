@@ -82,6 +82,23 @@ public class EmployeeController {
         model.addAttribute("employee", employee);
         return "edit_employee";
     }
+    
+    @PostMapping("/update")
+    public String updateEmployee(@ModelAttribute("employee") Employee employee, Model model) {
+        String result = employeeService.updateEmployee(employee);
+
+        if ("DUPLICATE".equals(result)) {
+            model.addAttribute("errorMessage", "Duplicate employee details found!");
+        } else if ("INVALID_DATE".equals(result)) {
+            model.addAttribute("errorMessage", "Birth date cannot be in the future.");
+        } else {
+            model.addAttribute("successMessage", "Employee updated successfully.");
+        }
+
+        model.addAttribute("employee", employee);
+        return "edit_employee";
+    }
+
 
 
 
