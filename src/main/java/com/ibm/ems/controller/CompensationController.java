@@ -65,6 +65,47 @@ public class CompensationController {
 
         return "add_compensation";
     }
+    
+    
+    @GetMapping("/history")
+    public String showCompensationHistoryForm(Model model) {
+        model.addAttribute("employees", employeeService.getAllEmployees());
+        return "comp_history_form";
+    }
+    @PostMapping("/history")
+    public String processCompHistory(@RequestParam("uid") String uid,
+                                     @RequestParam("startDate") String startDate,
+                                     @RequestParam("endDate") String endDate,
+                                     Model model) {
+        LocalDate start = LocalDate.parse(startDate);
+        LocalDate end = LocalDate.parse(endDate);
+
+        if (end.isBefore(start)) {
+            model.addAttribute("error", "End date cannot be before start date.");
+            model.addAttribute("employees", employeeService.getAllEmployees());
+            return "comp_history_form";
+        }
+
+        List<Compensation> history = compensationService.getCompensationHistory(uid, start, end);
+
+       
+        Map<String, Double> monthlyTotals = history.stream()
+                .collect(Collectors.groupingBy(
+                    c -> YearMonth.from(c.getDate()).toString(), 
+                    TreeMap::new, 
+                    Collectors.summingDouble(c -> c.getAmount() != null ? c.getAmount() : 0.0)
+                ));
+
+        model.addAttribute("uid", uid);
+        model.addAttribute("startDate", startDate);
+        model.addAttribute("endDate", endDate);
+        model.addAttribute("monthlyTotals", monthlyTotals); 
+
+        return "comp_history";
+    }
+
+    
+    
 
 
    
