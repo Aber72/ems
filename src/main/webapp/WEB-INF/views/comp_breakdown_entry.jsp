@@ -152,3 +152,40 @@
             animation: slideFadeIn 0.6s ease-out;
         }
     </style>
+    
+    </head>
+<body>
+<div class="container">
+    <h2><i class="fas fa-chart-pie"></i> Compensation Breakdown Entry</h2>
+
+    <c:if test="${not empty error}">
+        <div id="errorBox" class="error-message">
+            <i class="fas fa-exclamation-triangle"></i>
+            ${error}
+        </div>
+    </c:if>
+
+    <form action="breakdown" method="post" onsubmit="return fillHiddenUid();">
+
+        <label for="employeeSelect"><i class="fas fa-user-tag"></i> Select Employee:</label>
+        <select id="employeeSelect" name="uid" class="select2" required>
+            <option value="">-- Select Employee --</option>
+            <c:forEach var="emp" items="${employees}">
+                <option value="${emp.uid}">${emp.uid} - ${emp.firstName} ${emp.lastName}</option>
+            </c:forEach>
+        </select>
+
+        <label for="yearMonth"><i class="fas fa-calendar-alt"></i> Select Year and Month</label>
+        <input type="month" name="yearMonth" required/>
+
+        <input type="hidden" name="uid" id="finalUid"/>
+
+        <button type="submit"><i class="fas fa-eye"></i> View Breakdown</button>
+    </form>
+
+    <a class="back-link" href="<c:url value='/'/>"><i class="fas fa-arrow-left"></i> Back to Home</a>
+</div>
+
+<!-- JS -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
