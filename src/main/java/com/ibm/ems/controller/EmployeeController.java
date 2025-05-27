@@ -19,67 +19,106 @@ public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
 
-    // Show form to add employee
+    
     @GetMapping("/add")
-    public String showAddEmployeeForm(Model model) {
+    public String showAddForm(Model model) {
         model.addAttribute("employee", new Employee());
-        return "add-employee";
+        return "addEmployee";
     }
 
-    // Handle employee save
-    @PostMapping("/save")
-    public String saveEmployee(@Valid @ModelAttribute("employee") Employee employee, BindingResult result, Model model) {
+    @PostMapping("/add")
+    public String addEmployee(@Valid @ModelAttribute("employee") Employee employee,
+                              BindingResult result,
+                              Model model) {
         if (result.hasErrors()) {
-            return "add-employee";
+            return "addEmployee";
         }
 
-        if (employeeService.searchEmployees(employee.getFirstName(), employee.getLastName(), employee.getPosition()).stream()
-                .anyMatch(e -> e.getBirthDate().equals(employee.getBirthDate()))) {
-            model.addAttribute("errorMessage", "Employee already exists.");
-            return "add-employee";
-        }
+        String status = employeeService.addEmployee(employee);
 
-        employeeService.saveEmployee(employee);
-        model.addAttribute("successMessage", "Employee added successfully.");
-        model.addAttribute("employee", new Employee());
-        return "add-employee";
+        switch (status) {
+            case "DUPLICATE":
+                model.addAttribute("error", "Employee already exists.");
+                break;
+            case "INVALID_DATE":
+                model.addAttribute("error", "Birth date cannot be in the future.");
+                break;
+            case "SUCCESS":
+                model.addAttribute("msg", "Employee added successfully.");
+                model.addAttribute("employee", new Employee());
+                break;
+            default:
+                model.addAttribute("error", "An unknown error occurred.");
+        }
+        return "addEmployee";
     }
-
-    // Show search form
+    
     @GetMapping("/search")
-    public String showSearchForm(Model model) {
-        return "search-employee";
+    public String showSearchForm(@RequestParam(value = "firstName", required = false) String firstName,
+                                 @RequestParam(value = "lastName", required = false) String lastName,
+                                 @RequestParam(value = "position", required = false) String position,
+                                 Model model) {
+        List<Employee> results = employeeService.searchEmployees(firstName, lastName, position);
+        model.addAttribute("employees", results);
+        model.addAttribute("firstName", firstName);
+        model.addAttribute("lastName", lastName);
+        model.addAttribute("position", position);
+        return "searchEmployee";
     }
-
-    // Handle employee search
-    @PostMapping("/search")
-    public String searchEmployees(@RequestParam(required = false) String firstName,
-                                  @RequestParam(required = false) String lastName,
-                                  @RequestParam(required = false) String position,
-                                  Model model) {
-
-        List<Employee> employees = employeeService.searchEmployees(firstName, lastName, position);
+    
+    @GetMapping("/list")
+    public String listAllEmployees(Model model) {
+        List<Employee> employees = employeeService.getAllEmployees();
         model.addAttribute("employees", employees);
-        return "search-employee";
+        return "list_employees";
     }
-
-    // Show edit form
-    @GetMapping("/edit/{id}")
-    public String editEmployee(@PathVariable("id") Long id, Model model) {
-        Employee employee = employeeService.getEmployeeById(id);
+    
+    @GetMapping("/edit")
+    public String showEditForm(@RequestParam("uid") Long uid, Model model) {
+        Employee employee = employeeService.getEmployeeById(uid);
+        if (employee == null) {
+            return "redirect:/employee/list";
+        }
         model.addAttribute("employee", employee);
-        return "edit-employee";
+        return "edit_employee";
     }
-
-    // Handle update
+    
     @PostMapping("/update")
-    public String updateEmployee(@Valid @ModelAttribute("employee") Employee employee, BindingResult result, Model model) {
-        if (result.hasErrors()) {
-            return "edit-employee";
+    public String updateEmployee(@ModelAttribute("employee") Employee employee, Model model) {
+        String result = employeeService.updateEmployee(employee);
+
+        if ("DUPLICATE".equals(result)) {
+            model.addAttribute("errorMessage", "Duplicate employee details found!");
+        } else if ("INVALID_DATE".equals(result)) {
+            model.addAttribute("errorMessage", "Birth date cannot be in the future.");
+        } else {
+            model.addAttribute("successMessage", "Employee updated successfully.");
         }
 
-        employeeService.updateEmployee(employee);
-        model.addAttribute("successMessage", "Employee updated successfully.");
-        return "edit-employee";
+        model.addAttribute("employee", employee);
+        return "edit_employee";
     }
+    
+    @GetMapping("/delete")
+    public String deleteEmployee(@RequestParam("uid") Long uid) {
+        employeeService.deleteEmployee(uid);
+        return "redirect:/employee/list";
+    }
+
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        binder.registerCustomEditor(LocalDate.class, new PropertyEditorSupport() {
+            @Override
+            public void setAsText(String text) throws IllegalArgumentException {
+                setValue(LocalDate.parse(text, DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+            }
+        });
+    }
+
+
+
+
+
+
+  
 }
