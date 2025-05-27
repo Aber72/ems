@@ -273,4 +273,41 @@
     }
   </style>
 </head>
+
+<body class="light">
+  <div id="loader"><div class="spinner"></div></div>
+
+  <header>
+    <div class="logo-title">
+      <img src="/resources/images/IBM-Logo.jpg" alt="IBM Logo"
+           onerror="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/commons/5/51/IBM_logo.svg'">
+      <h1>IBM Employee Management System</h1>
+    </div>
+    <div class="toggle-wrapper">
+      <button class="dark-toggle" onclick="toggleDarkMode()">🌓 Mode</button>
+    </div>
+  </header>
+
+  <nav>
+    <button class="tab-button active" onclick="switchTab('employeeSection')"> Employees</button>
+    <button class="tab-button" onclick="switchTab('compensationSection')"> Compensation</button>
+  </nav>
+
+  <main>
+    <div class="card tab-content active" id="employeeSection">
+      <div class="section-title"> Employee Management</div>
+      <a href="employee/add" class="btn">Add Employee</a>
+      <a href="employee/search" class="btn"> Search Employee</a>
+      <a href="employee/list" class="btn">View/Edit Employee</a>
+    </div>
+
+    <div class="card tab-content" id="compensationSection">
+      <div class="section-title"> Compensation Management</div>
+      <a href="compensation/add" class="btn"> Add Compensation</a>
+      <a href="compensation/history" class="btn"> View History</a>
+      <a href="compensation/monthly-entry" class="btn">Monthly Breakdown</a>
+      <a href="compensation/edit" class="btn"> Edit Compensation</a>
+    </div>
+  </main>
+
   
