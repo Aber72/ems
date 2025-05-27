@@ -121,3 +121,39 @@
         }
     </style>
 </head>
+
+<body>
+<div class="container">
+    <!-- Error Display -->
+    <c:if test="${not empty error}">
+        <div class="error">${error}</div>
+    </c:if>
+
+    <!-- Stylish Header Block -->
+    <div class="header-block">
+        <h2>📊 Monthly Compensation History for UID: ${uid}</h2>
+        <p>🗓️ Date Range: <strong>${startDate}</strong> to <strong>${endDate}</strong></p>
+    </div>
+
+    <!-- Compensation Table -->
+    <c:if test="${not empty monthlyTotals}">
+        <table id="compensationTable">
+            <tr>
+                <th>Month</th>
+                <th>Total Compensation</th>
+                <th>Breakdown</th>
+            </tr>
+            <c:forEach var="entry" items="${monthlyTotals}">
+                <tr>
+                    <td>${entry.key}</td>
+                    <td>${entry.value}</td>
+                    <td>
+                        <form action="${pageContext.request.contextPath}/compensation/breakdown" method="post">
+                            <input type="hidden" name="uid" value="${uid}"/>
+                            <input type="hidden" name="yearMonth" value="${entry.key}"/>
+                            <button type="submit" class="breakdown-btn">Monthly Breakdown</button>
+                        </form>
+                    </td>
+                </tr>
+            </c:forEach>
+        </table>
