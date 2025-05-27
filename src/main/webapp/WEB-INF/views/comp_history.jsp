@@ -157,3 +157,30 @@
                 </tr>
             </c:forEach>
         </table>
+        </c:if>
+        
+         <!-- No Data Message -->
+    <c:if test="${empty monthlyTotals}">
+        <p>No compensation data found for selected range.</p>
+    </c:if>
+
+    <!-- Back Button -->
+    <a href="javascript:history.back()" class="back-button">← Back to Previous</a>
+</div>
+
+<!-- TypeScript Animation -->
+<script type="module">
+    window.addEventListener('DOMContentLoaded', () => {
+        const rows = document.querySelectorAll<HTMLTableRowElement>('#compensationTable tr');
+        rows.forEach((row, index) => {
+            row.style.opacity = '0';
+            setTimeout(() => {
+                row.style.transition = 'opacity 0.6s ease-out';
+                row.style.opacity = '1';
+            }, index * 100);
+        });
+    });
+</script>
+</body>
+</html>
+        
