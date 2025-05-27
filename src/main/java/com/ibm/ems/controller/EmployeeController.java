@@ -52,6 +52,20 @@ public class EmployeeController {
         }
         return "addEmployee";
     }
+    
+    @GetMapping("/search")
+    public String showSearchForm(@RequestParam(value = "firstName", required = false) String firstName,
+                                 @RequestParam(value = "lastName", required = false) String lastName,
+                                 @RequestParam(value = "position", required = false) String position,
+                                 Model model) {
+        List<Employee> results = employeeService.searchEmployees(firstName, lastName, position);
+        model.addAttribute("employees", results);
+        model.addAttribute("firstName", firstName);
+        model.addAttribute("lastName", lastName);
+        model.addAttribute("position", position);
+        return "searchEmployee";
+    }
+
 
   
 }
