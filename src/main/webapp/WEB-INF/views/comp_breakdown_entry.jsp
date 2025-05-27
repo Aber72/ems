@@ -189,3 +189,35 @@
 <!-- JS -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#employeeSelect').select2({
+            placeholder: "Search by name or ID",
+            allowClear: false,
+            width: 'resolve'
+        });
+
+        // Auto-hide error box after 5s
+        const errorBox = document.getElementById('errorBox');
+        if (errorBox) {
+            setTimeout(() => {
+                errorBox.style.animation = 'fadeOut 0.6s ease-out forwards';
+                setTimeout(() => errorBox.remove(), 700);
+            }, 5000);
+        }
+    });
+
+    function fillHiddenUid() {
+        const selectedUid = $('#employeeSelect').val();
+        if (selectedUid) {
+            $('#finalUid').val(selectedUid);
+            return true;
+        } else {
+            alert("Please select an employee.");
+            return false;
+        }
+    }
+</script>
+</body>
+</html>
