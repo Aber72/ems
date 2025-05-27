@@ -46,6 +46,38 @@
 <c:if test="${empty employees}">
     <div class="no-results">😢 No employees found.</div>
 </c:if>
+<a href="<c:url value='/'/>" class="back-link">⬅ Back to Home</a>
+
+<script type="text/javascript">
+    function filterTable() {
+        const input = document.getElementById("filterBox");
+        const filter = input.value.toLowerCase();
+        const table = document.getElementById("employeeTable");
+        const rows = table.getElementsByTagName("tr");
+        let visibleCount = 0;
+
+        for (let i = 1; i < rows.length; i++) {
+            const row = rows[i];
+            const cells = row.getElementsByTagName("td");
+            let match = false;
+
+            for (let j = 1; j < cells.length - 1; j++) {
+                if (cells[j].innerText.toLowerCase().includes(filter)) {
+                    match = true;
+                    break;
+                }
+            }
+
+            row.style.display = match ? "" : "none";
+            if (match) visibleCount++;
+        }
+
+        const noResultsMsg = document.querySelector(".no-results");
+        if (noResultsMsg) {
+            noResultsMsg.style.display = visibleCount === 0 ? "block" : "none";
+        }
+    }
+</script>
 
 
 </body>
