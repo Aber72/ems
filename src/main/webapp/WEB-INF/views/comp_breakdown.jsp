@@ -149,3 +149,13 @@
             </tr>
         </c:forEach>
     </table>
+    <div class="total-row">
+    Total Compensation: <span class="bold">₹${total}</span>
+</div>
+
+    <a class="back-link" href="${pageContext.request.contextPath}/compensation/monthly-entry">
+        <i class="fas fa-arrow-left back-icon"></i>Back to Previous
+    </a>
+</div>
+</body>
+</html>
